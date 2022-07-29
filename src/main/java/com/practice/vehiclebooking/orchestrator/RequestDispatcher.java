@@ -149,7 +149,7 @@ public class RequestDispatcher {
 
         double price = assetManagement.bookVehicle(input[1], input[2], stHr, enHr);
 
-        System.out.println(price);
+        System.out.println(Math.round(price));
     }
 
 
