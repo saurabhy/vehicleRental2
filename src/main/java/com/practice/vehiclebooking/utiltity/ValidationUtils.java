@@ -1,12 +1,13 @@
 package com.practice.vehiclebooking.utiltity;
 
+import com.practice.vehiclebooking.common.Constants;
 import com.practice.vehiclebooking.exception.CustomException;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class ValidationUtils {
 
     public static double isValidPrice(String s){
-        double price = -1.0;
+        double price = Constants.ERROR_PRICE;
 
         try{
             price = Double.valueOf(s);
@@ -14,7 +15,7 @@ public class ValidationUtils {
             throw new CustomException("Invalid price input");
         }
 
-        if(price == -1)
+        if(price == Constants.ERROR_PRICE)
             throw new CustomException("Invalid price input");
         return price;
     }
@@ -32,7 +33,7 @@ public class ValidationUtils {
 
         }
 
-        if(stHr>enHr || stHr < 1){
+        if(stHr>=enHr || stHr < 1){
             throw new CustomException("Invalid time input");
         }
 

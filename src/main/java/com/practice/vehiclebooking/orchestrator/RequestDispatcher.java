@@ -98,7 +98,7 @@ public class RequestDispatcher {
             Pair<Integer,Integer> bookingTime = ValidationUtils.isValidHr(input[2],input[3]);
             int stHr = bookingTime.getLeft();
             int enHr = bookingTime.getRight();
-            List<Vehicle> vehicles = assetManagement.getAvailableVehicle( input[1], stHr, enHr);
+            List<Vehicle> vehicles = assetManagement.getAvailableVehicle( input[1], stHr, enHr-1);
             if(vehicles == null){
                 System.out.println("No vehicle found for given branch and time slot");
                 return;
