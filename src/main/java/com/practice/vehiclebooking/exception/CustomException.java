@@ -1,4 +1,4 @@
-package com.practice.vehiclebooking.Exception;
+package com.practice.vehiclebooking.exception;
 
 public class CustomException extends RuntimeException{
     public CustomException(String errorMessage){

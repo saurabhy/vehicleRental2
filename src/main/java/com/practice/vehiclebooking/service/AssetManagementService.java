@@ -19,8 +19,6 @@ import java.util.Map;
 @Data
 public class AssetManagementService {
 
-
-
     public boolean addBranch(String branchId, String[] types){
         Map<String, Branch> branchMap = BranchList.getInstance().getBranchMap();
 

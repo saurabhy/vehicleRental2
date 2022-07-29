@@ -1,6 +1,6 @@
 package com.practice.vehiclebooking.utiltity;
 
-import com.practice.vehiclebooking.Exception.CustomException;
+import com.practice.vehiclebooking.exception.CustomException;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class ValidationUtils {
