@@ -27,6 +27,12 @@ public enum VehicleType {
         public String getType() {
             return "AUTO";
         }
+    },
+
+    BUS {
+        @Override
+        public String getType() { return "BUS"; }
     };
+
     public abstract String getType();
 }

@@ -121,13 +121,13 @@ public class AssetManagementService {
         Branch branch = BranchList.getInstance().getBranchMap().get(branchId);
 
         if(branch == null) {
-            return -1.0;
+            return Constants.ERROR_PRICE;
         }
 
         List<Vehicle> vehicles = branch.getInventoryList().get(vehicleType);
 
         if(vehicles==null)
-            return -1.0;
+            return Constants.ERROR_PRICE;
 
         // total size of vehicles of particular requested type
         int total = vehicles.size();
@@ -144,10 +144,10 @@ public class AssetManagementService {
         int availableTotal = availableVehicles.size();
 
         // to check for dynamic pricing
-        boolean toIncreasePrice = (availableTotal<0.2*total)?true:false;
+        boolean toIncreasePrice = (availableTotal<=Constants.SURGE_PRICING_THRESHOLD*total)?true:false;
 
         if(availableVehicles.size()==0)
-            return -1.0;
+            return Constants.ERROR_PRICE;
 
        StrategyProcessor.createOrdering(availableVehicles,Constants.MIN_PRICE_ALLOCATION_STRATEGY);
 
@@ -156,10 +156,10 @@ public class AssetManagementService {
         bookedVehicle.setSlots(bookedVehicle.getSlots()|reqSlot);
 
         if(toIncreasePrice){
-            return (endHr-startHr)*bookedVehicle.getPricePerHr()*Constants.SURGE_PRICE_MULTIPLIER;
+            return (endHr-startHr+1)*bookedVehicle.getPricePerHr()*Constants.SURGE_PRICE_MULTIPLIER;
         }
 
-        return (endHr-startHr)*bookedVehicle.getPricePerHr();
+        return (endHr-startHr+1)*bookedVehicle.getPricePerHr();
 
     }
 

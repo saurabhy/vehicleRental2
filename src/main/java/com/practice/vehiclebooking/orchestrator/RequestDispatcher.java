@@ -127,7 +127,7 @@ public class RequestDispatcher {
             Pair<Integer,Integer> bookingTime = ValidationUtils.isValidHr(input[3],input[4]);
             int stHr = bookingTime.getLeft();
             int enHr = bookingTime.getRight();
-            double price = assetManagement.bookVehicle(input[1], input[2], stHr, enHr);
+            double price = assetManagement.bookVehicle(input[1], input[2], stHr, enHr-1);
             System.out.println(Math.round(price));
 
         } catch (Exception e){
