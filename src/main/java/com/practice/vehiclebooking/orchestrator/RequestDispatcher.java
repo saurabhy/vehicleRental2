@@ -4,7 +4,9 @@ import com.practice.vehiclebooking.common.BranchList;
 import com.practice.vehiclebooking.service.AssetManagementService;
 import com.practice.vehiclebooking.entity.Branch;
 import com.practice.vehiclebooking.entity.Vehicle;
+import com.practice.vehiclebooking.utiltity.ValidationUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 
 import java.util.List;
@@ -72,20 +74,18 @@ public class RequestDispatcher {
             return;
         }
 
-        double price = -1.0;
-
         try{
-            price = Double.valueOf(input[4]);
+            double price = ValidationUtils.isValidPrice(input[4]);
+            boolean result = assetManagement.addVehicle(input[1],input[2],input[3], price);
+            if(result)
+                System.out.println("TRUE");
+            else
+                System.out.println("FALSE");
         } catch (Exception e){
             System.out.println("invalid price input");
             return;
         }
 
-        boolean result = assetManagement.addVehicle(input[1],input[2],input[3], price);
-        if(result)
-            System.out.println("TRUE");
-        else
-            System.out.println("FALSE");
     }
 
     private void displayVehicle(String [] input){
@@ -94,62 +94,47 @@ public class RequestDispatcher {
             return;
         }
 
-        int stHr = -1;
-        int enHr = -1;
-
-        try{
-            stHr = Integer.parseInt(input[2]);
-            enHr = Integer.parseInt(input[3]);
-        } catch (Exception e){
-            System.out.println("invalid time input");
-            return;
+        try {
+            Pair<Integer,Integer> bookingTime = ValidationUtils.isValidHr(input[2],input[3]);
+            int stHr = bookingTime.getLeft();
+            int enHr = bookingTime.getRight();
+            List<Vehicle> vehicles = assetManagement.getAvailableVehicle( input[1], stHr, enHr);
+            if(vehicles == null){
+                System.out.println("No vehicle found for given branch and time slot");
+                return;
+            }
+            for(int i=0;i<vehicles.size();i++){
+                System.out.print(vehicles.get(i).getVehicleId());
+                if(i!=vehicles.size()-1)
+                    System.out.print(",");
+            }
+            System.out.println();
         }
-
-        if(stHr>enHr || stHr == 0){
-            System.out.println("invalid time input");
-            return;
+        catch (Exception ex){
+            System.out.println("Invalid input - "+ ex.getMessage());
         }
-
-        List<Vehicle> vehicles = assetManagement.getAvailableVehicle( input[1], stHr, enHr);
-
-        if(vehicles == null){
-            System.out.println("No vehicle found for given branch and time slot");
-            return;
-        }
-
-        for(int i=0;i<vehicles.size();i++){
-            System.out.print(vehicles.get(i).getVehicleId());
-            if(i!=vehicles.size()-1)
-                System.out.print(",");
-        }
-        System.out.println();
     }
 
     private void book(String [] input){
+
         if(input.length!=5 || StringUtils.isEmpty(input[3]) || StringUtils.isEmpty(input[1]) || StringUtils.isEmpty(input[2]) || StringUtils.isEmpty(input[4])){
             System.out.println("Invalid Input");
             return;
         }
 
-        int stHr = -1;
-        int enHr = -1;
-
         try{
-            stHr = Integer.parseInt(input[3]);
-            enHr = Integer.parseInt(input[4]);
+
+            Pair<Integer,Integer> bookingTime = ValidationUtils.isValidHr(input[3],input[4]);
+            int stHr = bookingTime.getLeft();
+            int enHr = bookingTime.getRight();
+            double price = assetManagement.bookVehicle(input[1], input[2], stHr, enHr);
+            System.out.println(Math.round(price));
+
         } catch (Exception e){
-            System.out.println("invalid time input");
+            System.out.println("invalid input - "+ e.getMessage());
             return;
         }
 
-        if(stHr>enHr || stHr == 0){
-            System.out.println("invalid time input");
-            return;
-        }
-
-        double price = assetManagement.bookVehicle(input[1], input[2], stHr, enHr);
-
-        System.out.println(Math.round(price));
     }
 
 

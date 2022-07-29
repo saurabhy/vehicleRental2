@@ -6,4 +6,8 @@ public class Constants {
     public static String MIN_PRICE_ALLOCATION_STRATEGY = "MIN_PRICE_ALLOCATION_STRATEGY";
     public static String MAX_PRICE_ALLOCATION_STRATEGY = "MAX_PRICE_ALLOCATION_STRATEGY";
     public static double SURGE_PRICE_MULTIPLIER = 1.1;
+
+
+    //Day Scenerio
+    public static String RAINY_DAY = "RAINY_DAY";
 }
