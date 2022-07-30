@@ -1,9 +1,10 @@
 package com.practice.vehiclebooking.orchestrator;
 
 import com.practice.vehiclebooking.common.BranchList;
-import com.practice.vehiclebooking.service.AssetManagementService;
+import com.practice.vehiclebooking.service.AssetBookingService;
 import com.practice.vehiclebooking.entity.Branch;
 import com.practice.vehiclebooking.entity.Vehicle;
+import com.practice.vehiclebooking.service.AssetOnboardingService;
 import com.practice.vehiclebooking.utiltity.ValidationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -16,7 +17,9 @@ import java.util.Map;
 public class RequestDispatcher {
 
 
-    private AssetManagementService assetManagement;
+    private AssetBookingService assetBookingService;
+
+    private AssetOnboardingService assetOnboardingService;
 
     public RequestDispatcher(){
         init();
@@ -24,7 +27,8 @@ public class RequestDispatcher {
 
 
     public void init(){
-        assetManagement = new AssetManagementService();
+        assetBookingService = new AssetBookingService();
+        assetOnboardingService = new AssetOnboardingService();
         Map<String, Branch> branchMap = BranchList.getInstance().getBranchMap();
     }
 
@@ -60,7 +64,7 @@ public class RequestDispatcher {
 
         String [] types = input[2].split(",");
 
-        boolean result = assetManagement.addBranch(input[1],types);
+        boolean result = assetOnboardingService.addBranch(input[1],types);
 
         if(result)
             System.out.println("TRUE");
@@ -76,7 +80,7 @@ public class RequestDispatcher {
 
         try{
             double price = ValidationUtils.isValidPrice(input[4]);
-            boolean result = assetManagement.addVehicle(input[1],input[2],input[3], price);
+            boolean result = assetOnboardingService.addVehicle(input[1],input[2],input[3], price);
             if(result)
                 System.out.println("TRUE");
             else
@@ -98,7 +102,7 @@ public class RequestDispatcher {
             Pair<Integer,Integer> bookingTime = ValidationUtils.isValidHr(input[2],input[3]);
             int stHr = bookingTime.getLeft();
             int enHr = bookingTime.getRight();
-            List<Vehicle> vehicles = assetManagement.getAvailableVehicle( input[1], stHr, enHr-1);
+            List<Vehicle> vehicles = assetBookingService.getAvailableVehicle( input[1], stHr, enHr-1);
             if(vehicles == null){
                 System.out.println("No vehicle found for given branch and time slot");
                 return;
@@ -127,7 +131,7 @@ public class RequestDispatcher {
             Pair<Integer,Integer> bookingTime = ValidationUtils.isValidHr(input[3],input[4]);
             int stHr = bookingTime.getLeft();
             int enHr = bookingTime.getRight();
-            double price = assetManagement.bookVehicle(input[1], input[2], stHr, enHr-1);
+            double price = assetBookingService.bookVehicle(input[1], input[2], stHr, enHr-1);
             System.out.println(Math.round(price));
 
         } catch (Exception e){
